@@ -66,6 +66,24 @@ it is a separate program rather than something inside Minecraft.
 
 ## Install it
 
+### 0. Get it
+
+Download **`Leximine-<version>.zip`** from the
+[latest release](https://github.com/optumesto/leximine-mod/releases/latest)
+and unzip it anywhere you like. Inside are the two halves, already in the
+layout the setup script expects:
+
+```
+Leximine-0.1.0\
+  INSTALL.md      this file
+  LICENSE         the mod half's licence
+  backend\        the speech server -- setup.cmd lives here
+  mod\            the built jar
+```
+
+Keep `backend\` and `mod\` next to each other. `setup.cmd` finds the mod by
+looking beside itself, and installs only half the product if you move one.
+
 ### 1. Minecraft and Fabric
 
 1. Run the Minecraft launcher once and play **1.20.4** so the files exist.
@@ -175,7 +193,7 @@ sent to Microsoft.
 Two halves, two licences, both free and both open source:
 
 - **The mod** — [MIT](LICENSE). Do what you like with it.
-- **The speech backend** — [MPL-2.0](backend/LICENSE). Also do what you like
+- **The speech backend** — [MPL-2.0](https://github.com/optumesto/lingua-stt-backend/blob/main/LICENSE). Also do what you like
   with it, including building something commercial on top; the one condition
   is that if you modify its *own* files and distribute the result, those files
   stay open. New files you write alongside it are yours under any licence you

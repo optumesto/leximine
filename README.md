@@ -2,17 +2,19 @@
 
 Fabric mod for Minecraft **1.20.4**. Items you pick up are held in limbo until
 you say their name in the language you are learning; a local
-[lingua-stt-backend](../lingua-stt-backend) decides whether you got it right.
+[lingua-stt-backend](https://github.com/optumesto/lingua-stt-backend) decides whether you got it right.
 Recognition runs on your own machine: microphone audio is decoded in memory,
 never uploaded and never written to disk.
 
-> **Installing it to play?** → **[INSTALL.md](INSTALL.md)**. Requirements,
+> **Installing it to play?** → download the zip from the
+> **[latest release](https://github.com/optumesto/leximine-mod/releases/latest)**
+> and follow **[INSTALL.md](INSTALL.md)**. Requirements,
 > one-click setup, a `check-setup.cmd` that names whatever is missing, and an
 > exact account of the three things that do use the network. This file is the
 > design record: what each feature does and why it is built the way it is.
 >
 > **Making a release?** `scripts\make_release.ps1 -Zip` stages both halves
-> into `dist\Leximine-<version>\` (4 MB) and zips it (1.1 MB). It installs
+> into `dist\Leximine-<version>\` (860 KB) and zips it (475 KB). It installs
 > with no JDK, no Gradle and no source.
 
 **It plays.** Pick an item up, it is held in limbo, the overlay shows the word
@@ -34,7 +36,7 @@ below:
 | [The Nether wants a reason](#the-nether-wants-a-reason) | one sentence you compose yourself before the portal lights |
 | [The End has a toll](#the-end-has-a-toll) | all twelve eyes of ender, argued into their frames at the top tier |
 
-![The challenge overlay](run/hud.png)
+![The challenge overlay](docs/hud.png)
 
 The overlay above is a real capture mid-utterance: the word, the English gloss,
 a live transcript of what the backend is hearing with its similarity score, a
@@ -258,7 +260,7 @@ ships slf4j and gson, which cover the rest.
 The backend owns the dictionary, the timer and the difficulty — the mod sends
 a translation key and microphone audio and gets back `success` or `fail`. That
 means changing target language is a backend restart, not a mod rebuild. The
-wire format is in [`../lingua-stt-backend/PROTOCOL.md`](../lingua-stt-backend/PROTOCOL.md).
+wire format is in [`PROTOCOL.md`](https://github.com/optumesto/lingua-stt-backend/blob/main/PROTOCOL.md).
 
 `BackendProbe` runs once at client startup, reads the backend's `hello` frame
 and logs the model, device and readiness. It exists to catch the three things
