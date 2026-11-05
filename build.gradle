@@ -1,0 +1,165 @@
+plugins {
+	id 'fabric-loom' version "${loom_version}"
+}
+
+version = project.version
+group = project.maven_group
+
+base {
+	archivesName = project.archives_base_name
+}
+
+repositories {
+	mavenCentral()
+}
+
+loom {
+	// Splits the project into two source sets:
+	//   src/main   -- common code, also runs on a dedicated server
+	//   src/client -- client-only code (HUD, microphone, websocket)
+	//
+	// This matters here rather than being housekeeping: item pickup is
+	// server-authoritative, so the interception has to live in `main`, while
+	// anything touching the screen or the mic must never be loaded on a
+	// server. The split turns that into a compile error instead of a crash.
+	splitEnvironmentSourceSets()
+
+	mods {
+		"leximine" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+
+	runs {
+		// Keep the server's world and config out of the client's run dir.
+		server {
+			runDir = "run/server"
+
+			// The server owns the clock, so stretching a challenge for a
+			// screenshot (or for a slower learner) is set here:
+			//   gradlew runServer -PlexTimeout=30000
+			if (project.hasProperty("lexTimeout")) {
+				vmArg "-Dleximine.timeoutMs=" + project.property("lexTimeout")
+			}
+
+			// The end-to-end test needs every pickup to be challenged;
+			// otherwise a word learned in one scenario is skipped in the next.
+			if (project.hasProperty("lexFrequency")) {
+				vmArg "-Dleximine.frequency=" + project.property("lexFrequency")
+			}
+			if (project.hasProperty("lexLanguage")) {
+				vmArg "-Dleximine.language=" + project.property("lexLanguage")
+			}
+
+			// The punishment lotto rolls a 20% chance of one of five penalties,
+			// so any given payload is a 4% event -- untestable by waiting.
+			// These two make it deterministic:
+			//   gradlew runServer -PlexLottoChance=100 -PlexPenalty=T1_THE_ITCH
+			if (project.hasProperty("lexLottoChance")) {
+				vmArg "-Dleximine.lottoChance=" + project.property("lexLottoChance")
+			}
+			if (project.hasProperty("lexPenalty")) {
+				vmArg "-Dleximine.forcePenalty=" + project.property("lexPenalty")
+			}
+		}
+
+		// End-to-end test rig: this client skips every menu and joins the
+		// local dedicated server immediately, so the pickup -> overlay ->
+		// verdict loop can be driven from the server console instead of by
+		// hand. See "Testing the loop" in README.md.
+		// The ordinary client, which stops at the title screen. Separate from
+		// clientAuto below, which hardcodes --quickPlayMultiplayer and so can
+		// never show it -- and the title screen is where the language picker
+		// lives.
+		client {
+			client()
+			configName = "Client"
+			runDir = "run"
+
+			// -PlexOpenScreen=language opens the language picker once the
+			// title screen has settled, so it can be screenshotted:
+			//   gradlew runClient -PlexOpenScreen=language
+			// Nothing else can reach that screen. The e2e harness drives the
+			// game over RCON, which needs a server, and the title screen is
+			// the one place there is not one.
+			if (project.hasProperty("lexOpenScreen")) {
+				vmArg "-Dleximine.openScreen=" + project.property("lexOpenScreen")
+			}
+		}
+
+		clientAuto {
+			client()
+			configName = "Client (auto-connect)"
+			runDir = "run"
+			programArgs "--quickPlayMultiplayer", "127.0.0.1:25565"
+
+			// Lets the harness point this client at a dead port to prove the
+			// mod fails open when the speech backend is not running:
+			//   gradlew runClientAuto -PlexBackend=ws://127.0.0.1:59999/ws
+			if (project.hasProperty("lexBackend")) {
+				vmArg "-Dleximine.backend=" + project.property("lexBackend")
+			}
+
+			// Streams a wav file in place of the microphone, so the speech
+			// path can be driven end to end with nobody in the room:
+			//   gradlew runClientAuto -PlexFakeMic=run/testaudio/diamante.wav
+			if (project.hasProperty("lexFakeMic")) {
+				vmArg "-Dleximine.fakeMic=" + project.property("lexFakeMic")
+			}
+
+			if (project.hasProperty("lexPushToTalk")) {
+				vmArg "-Dleximine.pushToTalk=" + project.property("lexPushToTalk")
+			}
+
+			// Client-side rendering option, so it cannot be set through the
+			// server's /leximine command on this rig.
+			if (project.hasProperty("lexStream")) {
+				vmArg "-Dleximine.streamMode=" + project.property("lexStream")
+			}
+		}
+	}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Websocket client for talking to the Python STT backend.
+	// `include` nests it inside the built jar (jar-in-jar) so the mod works
+	// from a plain mods/ folder with no extra downloads. Minecraft already
+	// ships slf4j and gson, which are this library's only companions we need.
+	implementation "org.java-websocket:Java-WebSocket:${project.java_websocket_version}"
+	include "org.java-websocket:Java-WebSocket:${project.java_websocket_version}"
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 17
+	it.options.encoding = "UTF-8"
+}
+
+java {
+	withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+	def projectName = project.name
+	inputs.property "projectName", projectName
+
+	from("LICENSE") {
+		rename { "${it}_$projectName" }
+	}
+}

@@ -1,0 +1,46 @@
+name: Something is broken
+description: The mod or the speech backend is not doing what it should
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Run `check-setup.cmd` first** (in the backend folder). It inspects
+        every piece — Minecraft, Fabric, the mod, Python, the model, the GPU,
+        the backend, Ollama — and names whatever is missing along with the
+        fix. It changes nothing. Most reports are answered by it.
+
+  - type: textarea
+    id: preflight
+    attributes:
+      label: check-setup.cmd output
+      description: Paste it, or say what it reported.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+
+  - type: input
+    id: language
+    attributes:
+      label: Language you were playing in
+      placeholder: es_es
+
+  - type: markdown
+    attributes:
+      value: |
+        Two things that are **working as intended** and not bugs:
+
+        - **Items come free when the backend is closed.** Every gate in the
+          mod lets you through when it cannot reach the backend. Being unable
+          to play because a microphone or a server is down would be worse
+          than a free diamond.
+        - **Villagers trade without asking, and the nether portal just
+          lights.** Those two need Ollama, and both let you through without
+          it.

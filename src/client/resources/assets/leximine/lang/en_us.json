@@ -1,0 +1,21 @@
+{
+	"category.leximine": "Leximine",
+	"key.leximine.push_to_talk": "Push to talk",
+	"key.leximine.hear_it": "Hear the word",
+	"key.leximine.report": "Report a wrong sentence",
+	"key.leximine.debug_pass": "Debug: pass challenge",
+	"key.leximine.debug_fail": "Debug: fail challenge",
+
+	"hud.leximine.say_it": "Say it to keep it",
+	"hud.leximine.review": "Say it to open this",
+	"hud.leximine.review_block": "Say it to open this %s",
+	"hud.leximine.trade": "Ask them for this, in a sentence",
+	"hud.leximine.nether_gate": "Say where you are going, and why",
+	"hud.leximine.loading": "Looking up the word...",
+	"hud.leximine.correct": "Correcto!",
+	"hud.leximine.wrong": "Nope",
+	"hud.leximine.listen": "listen: %s",
+	"hud.leximine.speak_now": "speak now",
+	"hud.leximine.try_again": "not quite - try again",
+	"hud.leximine.hold_to_talk": "hold [V] to speak"
+}

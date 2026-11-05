@@ -1,0 +1,54 @@
+name: A sentence is wrong
+description: The game asked you to say something that is not right in your language
+title: "[ja_jp] "
+labels: ["language"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you — this is the most useful kind of issue this project gets.
+
+        Outside Spanish the sentences were written by someone who does not
+        speak the language. They are checked by machine, which catches a wrong
+        particle and cannot catch a sentence that is merely odd. You can.
+
+        **In game, press `N` while the prompt is up** (or just after). It
+        writes the exact line to `config/leximine-reports.txt` and prints it
+        in chat. Paste it below.
+
+  - type: textarea
+    id: report
+    attributes:
+      label: The reported line
+      description: From config/leximine-reports.txt, or copied out of chat.
+      placeholder: "2026-11-03 14:02\tja_jp\ttier 3\tダイヤモンドの剣\tダイヤモンドの剣を後で使うために取っておきます\tI will keep a diamond sword to use later"
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: whats-wrong
+    attributes:
+      label: What is wrong with it
+      description: >
+        "It sounds odd" is a complete answer. You do not have to know the rule
+        — a native speaker's instinct is the thing that is missing here.
+    validations:
+      required: true
+
+  - type: input
+    id: better
+    attributes:
+      label: What would you say instead?
+      description: Optional, and the most useful box on this form if you can fill it.
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: How wrong is it?
+      options:
+        - Wrong — a learner would be marked incorrect for saying this
+        - Unnatural — grammatical, but nobody talks like that
+        - Slightly off — understandable, could be better
+    validations:
+      required: true

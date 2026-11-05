@@ -1,0 +1,21 @@
+# Normalise line endings in the repository, check out native on each machine.
+* text=auto
+
+# Scripts that care. A .ps1 with LF endings is fine; a .cmd with them is not
+# -- the shell reads the trailing CR as part of the command and fails in ways
+# that look nothing like a line-ending problem.
+*.cmd    text eol=crlf
+*.bat    text eol=crlf
+*.ps1    text eol=crlf
+
+# gradlew is run by sh on Linux and macOS and must keep LF, whatever the
+# machine that committed it does by default.
+gradlew  text eol=lf
+*.sh     text eol=lf
+
+# Binary: never normalised, never diffed as text.
+*.png    binary
+*.ico    binary
+*.jar    binary
+*.wav    binary
+*.zip    binary
