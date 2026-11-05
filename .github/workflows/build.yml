@@ -1,0 +1,44 @@
+# Proves the mod builds from a clean checkout on a machine that is not Mason's.
+# That is the whole point: the toolchain here is pinned to the 1.20.4 line
+# (Loom 1.6, Gradle 8.6, Yarn), and a version bump that only works against one
+# warm Gradle cache should fail here rather than in someone's first clone.
+name: build
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md', 'docs/**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gradle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # The repository stores gradlew without the executable bit on some
+      # clones; calling it through sh makes the job independent of that.
+      - name: Build
+        run: sh ./gradlew build --no-daemon --stacktrace
+
+      - name: Show what was produced
+        run: ls -l build/libs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: leximine-jar
+          path: build/libs/*.jar
+          if-no-files-found: error

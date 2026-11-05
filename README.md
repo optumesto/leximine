@@ -171,7 +171,7 @@ cd Z:\leximine-mod
 .\gradlew.bat runClient    # launches 1.20.4 with the mod loaded
 ```
 
-No `JAVA_HOME` or PATH setup needed — see the JDK note below.
+Needs a **JDK 21** on `JAVA_HOME` or on PATH — see the JDK note below.
 
 ## Why these versions
 
@@ -202,20 +202,28 @@ all Fabric documentation and community code is written against it: the method
 this mod is built around is `PlayerInventory.insertStack` in Yarn and
 `Inventory.add` in Mojang names. Easier to read, and far easier to search for.
 
-## The JDK is pinned per-project
+## The JDK, and why it is *not* pinned in the repo
 
-This machine had **only Java 8** installed (`1.8.0_301`), which is first on
-PATH and may well be there for something else. Rather than reorder PATH or
-repoint `JAVA_HOME`, Temurin 21 was installed alongside and this one project
-points at it, in `gradle.properties`:
+This machine started with **only Java 8** installed (`1.8.0_301`), first on
+PATH and possibly there for something else, so Temurin 21 was installed
+alongside it and `gradle.properties` carried:
 
 ```properties
 org.gradle.java.home=C:/Program Files/Eclipse Adoptium/jdk-21.0.12.101-hotspot
 ```
 
-Forward slashes are deliberate: in a `.properties` file a backslash is an
-escape character. If you later move or upgrade the JDK, this is the one line
-to change.
+**That line has been removed**, because a committed absolute path is a path on
+exactly one machine: Gradle refuses to start when it does not exist, so every
+other clone and every CI runner failed before reading a single task. The build
+now takes its JDK from the environment — `JAVA_HOME` if set, otherwise `java`
+on PATH — which is what `JAVA_HOME` already points at here, and
+`gradlew build` is verified working without the pin.
+
+If you need to pin it for yourself, put the same line in your own
+`~/.gradle/gradle.properties` (`%USERPROFILE%\.gradle\gradle.properties` on
+Windows), where it applies to your machine and not to everyone who clones the
+repository. Forward slashes are deliberate either way: in a `.properties` file
+a backslash is an escape character.
 
 ---
 
