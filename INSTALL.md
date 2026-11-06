@@ -193,7 +193,7 @@ sent to Microsoft.
 Two halves, two licences, both free and both open source:
 
 - **The mod** — [MIT](LICENSE). Do what you like with it.
-- **The speech backend** — [MPL-2.0](https://github.com/optumesto/lingua-stt-backend/blob/main/LICENSE). Also do what you like
+- **The speech backend** — [MPL-2.0](https://github.com/optumesto/leximine-backend/blob/main/LICENSE). Also do what you like
   with it, including building something commercial on top; the one condition
   is that if you modify its *own* files and distribute the result, those files
   stay open. New files you write alongside it are yours under any licence you

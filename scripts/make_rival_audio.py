@@ -45,7 +45,7 @@ def fetch(lang: str, text: str) -> bytes:
                          f"{e.read().decode('utf8', 'replace')}")
     except (urllib.error.URLError, OSError) as e:
         raise SystemExit(f"backend unreachable at {BACKEND}: {e}\n"
-                         f"Start it with lingua-stt-backend\\start-backend.cmd")
+                         f"Start it with leximine-backend\\start-backend.cmd")
 
 
 def main() -> int:

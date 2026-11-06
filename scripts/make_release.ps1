@@ -29,7 +29,11 @@ param([switch]$Zip)
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path $PSScriptRoot -Parent
-$backend = Join-Path (Split-Path $root -Parent) "lingua-stt-backend"
+# "lingua-stt-backend" is the pre-2026-11-05 folder name, still accepted so
+# a clone made before the rename keeps building releases.
+$parent = Split-Path $root -Parent
+$backend = Join-Path $parent "leximine-backend"
+if (-not (Test-Path $backend)) { $backend = Join-Path $parent "lingua-stt-backend" }
 
 function Step($text) { Write-Host "  $text" -ForegroundColor Gray }
 function Ok($text) { Write-Host "  $text" -ForegroundColor Green }

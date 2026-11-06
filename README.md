@@ -2,7 +2,7 @@
 
 Fabric mod for Minecraft **1.20.4**. Items you pick up are held in limbo until
 you say their name in the language you are learning; a local
-[lingua-stt-backend](https://github.com/optumesto/lingua-stt-backend) decides whether you got it right.
+[leximine-backend](https://github.com/optumesto/leximine-backend) decides whether you got it right.
 Recognition runs on your own machine: microphone audio is decoded in memory,
 never uploaded and never written to disk.
 
@@ -268,7 +268,7 @@ ships slf4j and gson, which cover the rest.
 The backend owns the dictionary, the timer and the difficulty — the mod sends
 a translation key and microphone audio and gets back `success` or `fail`. That
 means changing target language is a backend restart, not a mod rebuild. The
-wire format is in [`PROTOCOL.md`](https://github.com/optumesto/lingua-stt-backend/blob/main/PROTOCOL.md).
+wire format is in [`PROTOCOL.md`](https://github.com/optumesto/leximine-backend/blob/main/PROTOCOL.md).
 
 `BackendProbe` runs once at client startup, reads the backend's `hello` frame
 and logs the model, device and readiness. It exists to catch the three things
@@ -282,7 +282,7 @@ Point it somewhere else with `-Dleximine.backend=ws://host:port/ws`.
 Start the backend first:
 
 ```powershell
-cd Z:\lingua-stt-backend; .\run.ps1
+cd Z:\leximine-backend; .\run.ps1
 ```
 
 ## How the loop works
@@ -665,7 +665,7 @@ explanation, not something to practise.
 
 If no model is running the trade is **allowed**. You did your part.
 
-Needs [Ollama](https://ollama.com) with `gemma3:12b` (or set `LINGUA_LLM_MODEL`
+Needs [Ollama](https://ollama.com) with `gemma3:12b` (or set `LEXIMINE_LLM_MODEL`
 in the backend's `.env` to whatever you have). The weights are pulled into VRAM
 the moment a villager is used, while you are still drawing breath.
 
@@ -908,7 +908,7 @@ exactly how an early version of the test suite passed while proving nothing.
 
 ## Testing the loop
 
-Start the backend first (`cd Z:\lingua-stt-backend; .\run.ps1`), then:
+Start the backend first (`cd Z:\leximine-backend; .\run.ps1`), then:
 
 ```powershell
 powershell -File scripts\make_test_audio.ps1   # once: synthesize the fixtures

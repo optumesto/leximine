@@ -8,7 +8,7 @@ backend's edge-tts voice is a real Spanish one, and /pronounce already returns
 
     python scripts/make_trade_audio.py
 
-Needs the backend running (start-backend.cmd in lingua-stt-backend).
+Needs the backend running (start-backend.cmd in leximine-backend).
 """
 
 from __future__ import annotations
@@ -58,7 +58,7 @@ def fetch(lang: str, text: str) -> bytes:
         raise SystemExit(f"backend refused: {e.code} {e.read().decode('utf8', 'replace')}")
     except (urllib.error.URLError, OSError) as e:
         raise SystemExit(f"backend unreachable at {BACKEND}: {e}\n"
-                         f"Start it with lingua-stt-backend\\start-backend.cmd")
+                         f"Start it with leximine-backend\\start-backend.cmd")
 
 
 def main() -> int:

@@ -680,7 +680,7 @@ def run(args: argparse.Namespace) -> int:
         print(f"client joined as {player!r}")
 
         if not backend_is_up():
-            print("!! backend is not running; start lingua-stt-backend first")
+            print("!! backend is not running; start the leximine-backend first")
             return 2
 
         # ---------------------------------------------------------------

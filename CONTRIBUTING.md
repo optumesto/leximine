@@ -4,8 +4,8 @@ Two repositories, and most contributions belong in the other one:
 
 | | where |
 |---|---|
-| A sentence reads oddly in your language | **[lingua-stt-backend](https://github.com/optumesto/lingua-stt-backend/blob/main/CONTRIBUTING.md)** — sentences live in `app/phrases.py` |
-| Speech is misheard, the backend will not start, the GPU is unused | **[lingua-stt-backend](https://github.com/optumesto/lingua-stt-backend/issues)** |
+| A sentence reads oddly in your language | **[leximine-backend](https://github.com/optumesto/leximine-backend/blob/main/CONTRIBUTING.md)** — sentences live in `app/phrases.py` |
+| Speech is misheard, the backend will not start, the GPU is unused | **[leximine-backend](https://github.com/optumesto/leximine-backend/issues)** |
 | Anything inside Minecraft — gates, the HUD, punishments, installing | here |
 
 To report a sentence you do not need to know what is wrong with it. Press **N**

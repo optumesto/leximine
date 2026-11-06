@@ -1,7 +1,43 @@
 # Changelog — leximine-mod
 
-Not a git repository, so this is the record of what changed and why. The
-READMEs carry the reasoning in full; this is the chronology.
+The record of what changed and why, in order. The READMEs carry the reasoning
+in full; this is the chronology.
+
+---
+
+## 2026-11-05 — the backend is renamed, and the build leaves one machine
+
+### Changed
+
+- **`lingua-stt-backend` is now `leximine-backend`**, which reverses the
+  decision recorded on 2026-11-02 that it should keep a generic name. The
+  reason it lost: the two halves of one product were called different things
+  everywhere a player sees them — the repository, the install docs, the
+  release zip — and a generic name buys nothing while the only thing it
+  serves is this mod. Every link and path here points at the new name;
+  `make_release.ps1` and `dry_run_commit.py` still accept a sibling folder
+  with the old name, so a clone from before the rename keeps working.
+  GitHub redirects the old URL.
+- **The JDK is no longer pinned in `gradle.properties`.**
+  `org.gradle.java.home` was an absolute path on one machine, and Gradle
+  refuses to start when it does not exist — so every other clone and every CI
+  runner failed before reading a single task. The build takes its JDK from
+  `JAVA_HOME` or PATH now, verified with a clean `gradlew build`, and the
+  README says where to pin one privately.
+- `LEXIMINE_LLM_MODEL` is the new name of the backend setting mentioned in the
+  Ollama section; `LINGUA_LLM_MODEL` still works.
+
+### Added
+
+- **CI** (`.github/workflows/build.yml`): builds the jar on Ubuntu with
+  Temurin 21 and uploads it as an artefact. A version bump that only works
+  against a warm local Gradle cache now fails here rather than in someone's
+  first clone. `gradlew` also gets its executable bit in the index, for Linux
+  and macOS clones.
+- **CONTRIBUTING.md**: which repository each kind of report belongs in, the
+  fail-open rule stated as the one non-negotiable invariant, the
+  client/common split that crashes a dedicated server when it is got wrong,
+  and `e2e_test.py` as the harness that actually tests a change.
 
 ---
 

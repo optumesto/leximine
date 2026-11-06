@@ -15,7 +15,8 @@ sys.stdout.reconfigure(encoding="utf-8")
 #: This repo, and the backend beside it. Derived rather than written down,
 #: so the script works on a machine whose drive letters are not this one's.
 _HERE = Path(__file__).resolve().parent.parent
-REPOS = [_HERE] + [p for p in (_HERE.parent / "lingua-stt-backend",)
+REPOS = [_HERE] + [p for p in (_HERE.parent / "leximine-backend",
+                               _HERE.parent / "lingua-stt-backend")
                    if p.is_dir()]
 
 #: Things that must never appear, whatever the ignore file says.
