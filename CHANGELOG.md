@@ -86,6 +86,31 @@ in full; this is the chronology.
   This is the dev build; the **shipped jar's** client path is still unverified,
   since that needs a launcher profile written on a Windows machine.
 
+### Changed — the download asks less of the person downloading it
+
+Prompted by asking what would actually make this easier for a first-time
+installer, the day before one tests it.
+
+- **`check-setup.cmd` is at the top of the zip**, beside `Setup.cmd`. Both
+  issue templates, INSTALL.md and the release notes all say to run it first,
+  and it was the only one of those four files that lived a folder down —
+  where nobody told to run it in a hurry would look. `make_release.ps1`
+  generates it with CRLF endings and asserts it shipped.
+- **INSTALL.md no longer lists Python as required.** The backend fetches its
+  own when the machine has none, so the "Add python.exe to PATH" checkbox
+  that used to be a dead end is now a detail about speed.
+- **Step 2 says it is the long step**, names the 2.3 GB and the 461 MB, says
+  the progress bars are real, and says what to do if it is interrupted. It
+  previously described a step that finished in seconds and left the waiting
+  for later.
+- **The "what talks to the internet" table was missing its two largest
+  entries.** It listed Modrinth, Hugging Face and Microsoft; it omitted
+  **PyPI**, which is the 2.3 GB, and python.org, which is new. Five now, each
+  with when it happens and what is sent. This is the second correction to
+  that table in two days — the first added Hugging Face, and I did not then
+  check whether anything else was missing, which is how the bigger omission
+  survived.
+
 ---
 
 ## 2026-11-05 — the backend is renamed, and the build leaves one machine

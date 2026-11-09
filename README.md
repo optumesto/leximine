@@ -9,7 +9,7 @@ never uploaded and never written to disk.
 > **Installing it to play?** → **[download `Leximine.zip`](https://github.com/optumesto/leximine/releases/latest/download/Leximine.zip)**
 > and follow **[INSTALL.md](INSTALL.md)**. Requirements,
 > one-click setup, a `check-setup.cmd` that names whatever is missing, and an
-> exact account of the three things that do use the network. This file is the
+> exact account of the five things that do use the network. This file is the
 > design record: what each feature does and why it is built the way it is.
 >
 > **Making a release?** `scripts\make_release.ps1 -Zip` stages both halves

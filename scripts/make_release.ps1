@@ -144,12 +144,28 @@ $setupCmd = @(
 [System.IO.File]::WriteAllText((Join-Path $stage "Setup.cmd"), $setupCmd + "`r`n",
                                [System.Text.Encoding]::ASCII)
 
+# The diagnostic, next to the installer. Both issue templates, INSTALL.md and
+# the release notes all say "run check-setup.cmd first" -- and it was the one
+# file of the four that lived a folder down, where nobody told to run it in a
+# hurry would look.
+$checkCmd = @(
+    '@echo off',
+    'rem Double-click this when something is not working. It inspects every',
+    'rem piece -- Minecraft, Fabric, the mod, Python, the GPU, the backend --',
+    'rem and names the one that is missing, with the fix. It changes nothing.',
+    'title Leximine setup check',
+    'powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0backend\scripts\doctor.ps1"'
+) -join "`r`n"
+[System.IO.File]::WriteAllText((Join-Path $stage "check-setup.cmd"), $checkCmd + "`r`n",
+                               [System.Text.Encoding]::ASCII)
+
 # --- prove it is actually complete ------------------------------------
 # Asserted rather than assumed: a release is the one artifact nobody tests
 # before a stranger does.
 $required = @(
     "INSTALL.md",
     "Setup.cmd",
+    "check-setup.cmd",
     "mod\$($jar.Name)",
     "mod\scripts\install_mod.ps1",
     "backend\setup.cmd",

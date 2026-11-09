@@ -6,7 +6,7 @@ own machine: **your microphone audio is never uploaded and never written to
 disk** — it is decoded in memory and discarded.
 
 That is not the same as "offline". See
-[What talks to the internet](#what-talks-to-the-internet) below for the three
+[What talks to the internet](#what-talks-to-the-internet) below for the five
 things that do.
 
 It comes in two halves and you need both:
@@ -30,13 +30,23 @@ it is a separate program rather than something inside Minecraft.
 - **Windows 10 or 11.** The mod itself is cross-platform; the one-click setup
   scripts are Windows-only. On Linux or macOS you can still run everything by
   hand (see *Doing it manually* at the bottom).
-- **Python 3.11 or newer**, from [python.org](https://www.python.org/downloads/).
-  Tick **"Add python.exe to PATH"** in the installer — almost every setup
-  problem people hit is this box being unticked.
 - **About 5 GB of free disk space**: 2.3 GB of Python libraries, 0.5 GB for
   the speech model, and room to spare.
 - **A microphone.** Any one. A headset is better than a laptop's built-in mic,
   but only because of background noise.
+
+**You do not need Python.** Setup looks for Python 3.11 or newer and uses it
+if you have it; if you do not, it fetches a private copy into the Leximine
+folder — 11 MB, the official embeddable build from python.org, checksum
+verified. Nothing is installed system-wide, nothing goes on your PATH, and
+deleting the Leximine folder removes it completely.
+
+If you would rather install your own (it saves that download and is the normal
+thing if you use Python for anything else), get it from
+[python.org](https://www.python.org/downloads/) and tick **"Add python.exe to
+PATH"** in the installer. Untick that box and Leximine will simply not see it
+and fetch its own copy instead, which is the one failure this used to turn
+into a dead end.
 
 **Strongly recommended**
 
@@ -100,16 +110,27 @@ checksum.
 Double-click **`Setup.cmd`**, at the top of the folder you just unzipped.
 (`backend\setup.cmd` is the same script, if you would rather run it there.)
 
-It builds the Python environment, fetches Fabric API, puts a **Leximine
-Backend** shortcut on your desktop, and adds a **Leximine** profile to your
-Minecraft launcher with both mods already in it. The profile keeps its own
-saves folder, so it cannot disturb worlds you already have, and your other
-profiles are left alone.
+**This is the long step, and it is meant to be.** It builds the Python
+environment (about 2.3 GB of libraries), downloads the speech model (461 MB),
+fetches Fabric API, puts a **Leximine Backend** shortcut on your desktop, and
+adds a **Leximine** profile to your Minecraft launcher with both mods already
+in it. Expect several minutes, and longer on a slow connection; the progress
+bars are real, so you can watch it move.
+
+Everything slow happens here on purpose, so that the desktop shortcut starts
+in seconds afterwards rather than surprising you with a download the first
+time you want to play. **Leave the window alone while it works** — closing it
+part way through leaves a half-built environment that has to be deleted by
+hand. If it does get interrupted, delete the `backend\.venv` folder and run
+`Setup.cmd` again.
+
+The **Leximine** profile keeps its own saves folder, so it cannot disturb
+worlds you already have, and your other profiles are left alone.
 
 ### 3. Check it
 
-Double-click **`check-setup.cmd`**. It inspects every piece and tells you
-which ones are missing and how to fix each one. It changes nothing, so it is
+Double-click **`check-setup.cmd`**, also at the top of the folder. It inspects
+every piece and tells you which ones are missing and how to fix each one. It changes nothing, so it is
 safe to run whenever something seems wrong.
 
 A healthy machine looks like this:
@@ -170,12 +191,15 @@ part that matters and not of everything.
 **Your voice never leaves.** Recognition happens locally in the backend, in
 memory. Nothing writes your microphone audio to disk and nothing uploads it.
 
-Three things use the network, in the order you meet them:
+Five things use the network, in the order you meet them. Four of the five are
+one-time downloads during setup, and none of them sends anything about you:
 
 | | When | What is sent |
 |---|---|---|
+| **python.org** | setup, once, and only if you have no Python 3.11+ | nothing about you; it downloads the official 11 MB embeddable build and checks it against a pinned checksum |
+| **PyPI** | setup, once | nothing about you; `pip` downloads the Python libraries listed in `requirements.txt` — the 2.3 GB, and the biggest download here by far |
 | **Modrinth** | setup, once | nothing about you; it downloads Fabric API and checks it against its published checksum |
-| **Hugging Face** | first backend start, once | nothing about you; it downloads the speech model (`Systran/faster-whisper-small`, 461 MB). It is deliberately not in the zip: the weights are reached through relative symlinks that Windows zip tools flatten to 0-byte files, so a bundled copy would look complete, be empty, and fail on load. |
+| **Hugging Face** | setup, once | nothing about you; it downloads the speech model (`Systran/faster-whisper-small`, 461 MB). It is deliberately not in the zip: the weights are reached through relative symlinks that Windows zip tools flatten to 0-byte files, so a bundled copy would look complete, be empty, and fail on load. |
 | **Microsoft (edge-tts)** | you miss a word and it plays you the correct pronunciation | the word being pronounced, as text — e.g. `Diamante`. Never your audio. |
 
 Everything else is local, including two things that sound like they would not
