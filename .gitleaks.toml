@@ -1,0 +1,25 @@
+# Gitleaks configuration for leximine.
+#
+# The default rule set is kept in full. This file adds one allowlist and
+# nothing else.
+title = "leximine"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = """
+$FABRIC_API_SHA1 in scripts/install_mod.ps1 is the published SHA-1 of a public
+file on Modrinth, which the installer compares against the jar it has just
+downloaded. It is the opposite of a secret: it exists so that a tampered
+download is caught before it reaches a mods folder. Gitleaks reads it as a
+generic high-entropy string.
+
+Scoped to the assignment, not to the file and not to the literal value: a real
+secret added to install_mod.ps1 is still found, and bumping the pinned Fabric
+API version does not require editing this file.
+"""
+regexTarget = "line"
+regexes = [
+  '''\$FABRIC_API_SHA1\s*=\s*"[0-9a-f]{40}"''',
+]
