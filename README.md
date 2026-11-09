@@ -102,9 +102,9 @@ decompiles Minecraft; seconds after that). `gradlew runClient` launches 1.20.4
 and the game log shows the whole chain:
 
 ```
-    - leximine 0.1.1
-[Render thread/INFO] (leximine) Leximine 0.1.1 loaded (common)
-[Render thread/INFO] (leximine) Leximine 0.1.1 loaded (client)
+    - leximine 0.1.0
+[Render thread/INFO] (leximine) Leximine 0.1.0 loaded (common)
+[Render thread/INFO] (leximine) Leximine 0.1.0 loaded (client)
 [leximine-backend-probe/INFO] (leximine) Probing STT backend at ws://127.0.0.1:8760/ws
 [WebSocketConnectReadThread-75/INFO] (leximine) Backend connected (HTTP 101)
 [WebSocketConnectReadThread-75/INFO] (leximine) Backend ready=true model=small device=cuda language=es_es threshold=80
@@ -150,10 +150,18 @@ build — was then booted on a real Fabric 1.20.4 dedicated server with the
 installed Fabric API:
 
 ```
-    - leximine 0.1.1
-[main/INFO]: Leximine 0.1.1 loaded (common), timeout 6000 ms, per-item cooldown 300s
+    - leximine 0.1.0
+[main/INFO]: Leximine 0.1.0 loaded (common), timeout 6000 ms, per-item cooldown 300s
 [Server thread/INFO]: Done (1.518s)!
 ```
+
+Both captures above are from 0.1.0, the last jar booted on a real server. The
+0.1.1 jar was then compared against that one entry by entry: same 60 class
+files, all byte-identical, and a single line different in `fabric.mod.json`
+(`"version"`). So the mixin result carries. But nobody has watched 0.1.1 itself
+come up in production, and this section records what was watched rather than
+what can be inferred — the version in these two blocks is the version that
+printed them.
 
 That matters because a mixin can work in dev and fail in production if its
 refmap is wrong. `leximine.mixins.json` is `required: true` with
