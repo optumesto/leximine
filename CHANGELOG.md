@@ -55,6 +55,25 @@ in full; this is the chronology.
   `.cmd` it is about to ship and refuses the release, alongside the checks for
   a missing jar and for Mojang's dictionaries.
 
+### Verified
+
+- **The published zip was installed and booted by a reviewer who had no
+  checkout**, from `Leximine.zip` alone, on a machine with no GPU. The
+  production jar loads on a real Fabric 1.20.4 dedicated server:
+  `Loading 44 mods: leximine 0.1.1`, the full startup line, then `Done`, with
+  no Leximine error anywhere in the log. All three common mixins resolved
+  against production mappings — `required: true` with `defaultRequire: 1`
+  would have crashed startup otherwise. That capture replaces the one this
+  README had been carrying, which no shipped jar could have printed.
+- **Not covered by that run, and not by anything else**: the client half — the
+  HUD, microphone capture and picking an item up in-game — needs a real
+  Minecraft client, and `Setup.cmd` needs Windows. The README now says so
+  where the capture is, rather than leaving it to be assumed.
+- **INSTALL.md's network table listed two sources while the README promised
+  three.** The missing one was the largest: Hugging Face, which the backend
+  pulls `Systran/faster-whisper-small` from on first start, 461 MB. Named now,
+  with why it is not in the zip.
+
 ---
 
 ## 2026-11-05 — the backend is renamed, and the build leaves one machine

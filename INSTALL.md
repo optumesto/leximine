@@ -170,12 +170,13 @@ part that matters and not of everything.
 **Your voice never leaves.** Recognition happens locally in the backend, in
 memory. Nothing writes your microphone audio to disk and nothing uploads it.
 
-Two things use the network:
+Three things use the network, in the order you meet them:
 
 | | When | What is sent |
 |---|---|---|
-| **Microsoft (edge-tts)** | you miss a word and it plays you the correct pronunciation | the word being pronounced, as text — e.g. `Diamante`. Never your audio. |
 | **Modrinth** | setup, once | nothing about you; it downloads Fabric API and checks it against its published checksum |
+| **Hugging Face** | first backend start, once | nothing about you; it downloads the speech model (`Systran/faster-whisper-small`, 461 MB). It is deliberately not in the zip: the weights are reached through relative symlinks that Windows zip tools flatten to 0-byte files, so a bundled copy would look complete, be empty, and fail on load. |
+| **Microsoft (edge-tts)** | you miss a word and it plays you the correct pronunciation | the word being pronounced, as text — e.g. `Diamante`. Never your audio. |
 
 Everything else is local, including two things that sound like they would not
 be. The dictionary is built by reading the official translation files out of
@@ -183,7 +184,7 @@ be. The dictionary is built by reading the official translation files out of
 Ollama, if you use it, runs on your machine — the sentence you say to a
 villager is judged there.
 
-To cut the first one out: `/lex set pronunciation false`. The client only
+To cut the Microsoft one out: `/lex set pronunciation false`. The client only
 requests a spoken example when that setting is on, so with it off nothing is
 sent to Microsoft.
 

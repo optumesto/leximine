@@ -99,7 +99,9 @@ when the speech backend is down. The screenshot above came from
 
 `gradlew build` succeeds (16m 25s on the first run, which downloads and
 decompiles Minecraft; seconds after that). `gradlew runClient` launches 1.20.4
-and the game log shows the whole chain:
+and the game log shows the whole chain — a **0.1.0 dev build**, with the
+`(common)` line abridged; the full form it prints today is in the Verified
+section below:
 
 ```
     - leximine 0.1.0
@@ -145,23 +147,34 @@ installer after a rebuild to push the new jar.
 ### Verified
 
 Installing on this machine took the launcher from 8 profiles to 9 with none
-lost and none modified. The **production jar** — the remapped one, not the dev
-build — was then booted on a real Fabric 1.20.4 dedicated server with the
-installed Fabric API:
+lost and none modified, on Windows. Separately, the **production jar** — the
+remapped one, not the dev build — boots on a real Fabric 1.20.4 dedicated
+server with the installed Fabric API:
 
 ```
-    - leximine 0.1.0
-[main/INFO]: Leximine 0.1.0 loaded (common), timeout 6000 ms, per-item cooldown 300s
-[Server thread/INFO]: Done (1.518s)!
+Loading 44 mods:
+    - leximine 0.1.1
+[main/INFO]: Leximine 0.1.1 loaded (common): language es_es, 10m (ask until correct), timeout 6s, crafting on
+[Server thread/INFO]: Done
 ```
 
-Both captures above are from 0.1.0, the last jar booted on a real server. The
-0.1.1 jar was then compared against that one entry by entry: same 60 class
-files, all byte-identical, and a single line different in `fabric.mod.json`
-(`"version"`). So the mixin result carries. But nobody has watched 0.1.1 itself
-come up in production, and this section records what was watched rather than
-what can be inferred — the version in these two blocks is the version that
-printed them.
+That matters because a mixin can work in dev and fail in production if its
+refmap is wrong. `leximine.mixins.json` is `required: true` with
+`defaultRequire: 1` over `ItemEntityMixin`, `CraftingResultSlotMixin` and
+`SmithingScreenHandlerMixin`, so a mixin that failed to apply would crash
+startup instead of silently doing nothing — it didn't, and no Leximine error
+appears anywhere in that log, which means all three resolved against
+production mappings.
+
+**Provenance of that capture, because it is the claim this section exists to
+make:** 2026-11-09, from the published `Leximine.zip` and nothing else, by a
+reviewer who had no checkout and no prior install, on a machine with no GPU.
+Not from a dev build and not from this machine.
+
+**What that run did not cover**, and nothing else has: the client half — the
+HUD, microphone capture, and picking an item up in-game — needs a real
+Minecraft client, and `Setup.cmd` needs Windows. Both are verified here only
+by the dev-environment runs above.
 
 That matters because a mixin can work in dev and fail in production if its
 refmap is wrong. `leximine.mixins.json` is `required: true` with
