@@ -73,6 +73,18 @@ in full; this is the chronology.
   three.** The missing one was the largest: Hugging Face, which the backend
   pulls `Systran/faster-whisper-small` from on first start, 461 MB. Named now,
   with why it is not in the zip.
+- **The client half is verified in the dev environment.** `e2e_test.py` ran all
+  12 scenarios green on 2026-11-09: a correct `Diamante` through
+  `-Dleximine.fakeMic` scored 100 and the diamond landed in the inventory, a
+  wrong word scored 40 and it did not, a dead backend granted the item rather
+  than eating it, a learned word stopped being asked and `forget all` brought
+  the asking back, a bare noun was refused by gemma3 while `"Quiero comprar pan
+  por favor."` opened the trade, and an orphaned review timed out server-side
+  with the next one still firing. Asserted against game state via
+  `clear <player> <item> 0`, not log lines, and the speech scenarios separately
+  require a non-empty transcript so that fail-open cannot masquerade as a pass.
+  This is the dev build; the **shipped jar's** client path is still unverified,
+  since that needs a launcher profile written on a Windows machine.
 
 ---
 
