@@ -171,6 +171,12 @@ make:** 2026-11-09, from the published `Leximine.zip` and nothing else, by a
 reviewer who had no checkout and no prior install, on a machine with no GPU.
 Not from a dev build and not from this machine.
 
+It reads 0.1.1, and 0.1.2 is current. Checked rather than assumed: the two
+jars were compared entry by entry and differ in exactly one line of
+`fabric.mod.json` — the version — with all 60 class files byte-identical.
+0.1.2 is a backend-and-installer release; no Java changed. So the mixin result
+carries, and this block keeps the version that printed it.
+
 **What that run did not cover**, and nothing else has: the client half — the
 HUD, microphone capture, and picking an item up in-game — needs a real
 Minecraft client, and `Setup.cmd` needs Windows. Both are verified here only

@@ -83,7 +83,7 @@ newest release — and unzip it anywhere you like. Inside are the two halves,
 already in the layout the setup script expects:
 
 ```
-Leximine-0.1.1\
+Leximine-0.1.2\
   Setup.cmd       double-click this
   INSTALL.md      this file
   LICENSE         the mod half's licence
@@ -139,7 +139,7 @@ A healthy machine looks like this:
   Minecraft
     [ok]   Fabric loader for 1.20.4 (fabric-loader-0.18.6-1.20.4)
     [ok]   'Leximine' launcher profile present
-    [ok]   leximine-0.1.1.jar installed
+    [ok]   leximine-0.1.2.jar installed
     [ok]   Fabric API present (fabric-api-0.97.3+1.20.4.jar)
 
   Speech backend (required)
