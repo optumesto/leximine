@@ -51,7 +51,12 @@ Step "version $version"
 
 # --- a fresh jar ------------------------------------------------------
 Step "building..."
-& (Join-Path $root "gradlew.bat") build --console=plain -q
+# --project-dir, not the working directory. gradlew.bat finds its own wrapper
+# from where the script lives, but Gradle takes the PROJECT from the directory
+# you happen to be standing in -- so this ran fine from inside the repo and
+# failed with "does not contain a Gradle build" from anywhere else, including
+# a double-click.
+& (Join-Path $root "gradlew.bat") build --console=plain -q --project-dir $root
 if ($LASTEXITCODE -ne 0) { throw "gradle build failed" }
 $jar = Get-ChildItem (Join-Path $root "build\libs") -Filter "leximine-*.jar" |
     Where-Object { $_.Name -notlike "*-sources.jar" } |
@@ -97,11 +102,9 @@ first time it starts, and tells you what to do if it cannot find it.
 
 Nothing for you to do here.
 "@ | Set-Content -Path (Join-Path $langOut "README.txt") -Encoding ascii
-# LICENSE is in this list on purpose. The backend has none at the time of
-# writing, and the two halves ship in one zip -- so until it gets one, that
-# half of the download is technically not redistributable by anyone. Drop a
-# LICENSE into the backend folder and it will start shipping with no further
-# change here.
+# LICENSE is in this list and asserted below. The backend is MPL-2.0 and the
+# two halves ship in one zip, so a download without it is one the person who
+# downloaded it cannot legally pass on.
 foreach ($file in @("requirements.txt", ".env.example", "run.ps1",
                     "setup.cmd", "start-backend.cmd", "stop-backend.cmd",
                     "check-setup.cmd", "leximine.ico", "leximine.png",
@@ -120,11 +123,33 @@ foreach ($file in @("LICENSE", "LICENSE.txt", "LICENSE.md")) {
     if (Test-Path $src) { Copy-Item $src (Join-Path $stage $file) }
 }
 
+# --- one click, at the top of the zip ---------------------------------
+# Without this the first instruction after unzipping is "go into backend\",
+# which is not a folder anyone expects an installer to live in. It forwards to
+# the very script backend\setup.cmd runs, and setup.ps1 resolves the mod and
+# the backend from its own location rather than the working directory, so the
+# two entry points are interchangeable.
+$setupCmd = @(
+    '@echo off',
+    'rem Double-click this. It installs both halves -- the speech backend and',
+    'rem the mod -- and adds a Leximine profile to your Minecraft launcher.',
+    'rem Identical to backend\setup.cmd; this copy is here so you do not have',
+    'rem to go looking for it.',
+    'title Leximine setup',
+    'powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0backend\scripts\setup.ps1" %*',
+    'if errorlevel 1 pause'
+) -join "`r`n"
+# CRLF written explicitly, not by Set-Content: a here-string carries the line
+# endings of THIS file, and cmd.exe wants CRLF. See the check below.
+[System.IO.File]::WriteAllText((Join-Path $stage "Setup.cmd"), $setupCmd + "`r`n",
+                               [System.Text.Encoding]::ASCII)
+
 # --- prove it is actually complete ------------------------------------
 # Asserted rather than assumed: a release is the one artifact nobody tests
 # before a stranger does.
 $required = @(
     "INSTALL.md",
+    "Setup.cmd",
     "mod\$($jar.Name)",
     "mod\scripts\install_mod.ps1",
     "backend\setup.cmd",
@@ -149,6 +174,25 @@ foreach ($rel in @("backend\.venv", "backend\models", "backend\.env", "backend\d
 # Mojang's translation strings, specifically.
 $strays = Get-ChildItem (Join-Path $stage "backend\lang") -Filter "*.json" -ErrorAction SilentlyContinue
 foreach ($stray in $strays) { $missing += "SHOULD NOT SHIP: backend\lang\$($stray.Name)" }
+# Every .cmd must use CRLF. cmd.exe tolerates LF right up until it does not --
+# a label or an if-block is enough -- and the failure reads as anything but a
+# line-ending problem. This has already shipped wrong once: check-setup.cmd
+# went out in 0.1.0 with LF endings, because .gitattributes fixes a fresh clone
+# and says nothing about a working copy that predates the rule, and `git status`
+# stays silent because it compares normalised content.
+foreach ($cmdFile in (Get-ChildItem $stage -Recurse -Filter "*.cmd")) {
+    $bytes = [System.IO.File]::ReadAllBytes($cmdFile.FullName)
+    $lf = 0; $crlf = 0
+    for ($i = 0; $i -lt $bytes.Length; $i++) {
+        if ($bytes[$i] -eq 10) {
+            $lf++
+            if ($i -gt 0 -and $bytes[$i - 1] -eq 13) { $crlf++ }
+        }
+    }
+    if ($lf -ne $crlf) {
+        $missing += "LF ENDINGS, cmd.exe needs CRLF: $($cmdFile.Name) ($crlf of $lf)"
+    }
+}
 if ($missing.Count -gt 0) {
     Write-Host ""
     foreach ($m in $missing) { Write-Host "  !! $m" -ForegroundColor Red }
@@ -159,7 +203,11 @@ $size = [math]::Round((Get-ChildItem $stage -Recurse -File | Measure-Object Leng
 Ok "staged  $stage  ($size MB)"
 
 if ($Zip) {
-    $zipPath = Join-Path $dist "Leximine-$version.zip"
+    # Not version-stamped, deliberately. GitHub serves the newest release's
+    # asset at /releases/latest/download/<name>, so a fixed name makes one URL
+    # the download link forever -- the version is on the release and on the
+    # folder inside, which is where a player can still read it.
+    $zipPath = Join-Path $dist "Leximine.zip"
     if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
     Compress-Archive -Path $stage -DestinationPath $zipPath
     Ok "zipped  $zipPath  ($([math]::Round((Get-Item $zipPath).Length / 1MB, 1)) MB)"

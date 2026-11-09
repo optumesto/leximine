@@ -68,16 +68,16 @@ it is a separate program rather than something inside Minecraft.
 
 ### 0. Get it
 
-Download **`Leximine-<version>.zip`** from the
-[latest release](https://github.com/optumesto/leximine-mod/releases/latest)
-and unzip it anywhere you like. Inside are the two halves, already in the
-layout the setup script expects:
+**[Download `Leximine.zip`](https://github.com/optumesto/leximine/releases/latest/download/Leximine.zip)** — one link, always the
+newest release — and unzip it anywhere you like. Inside are the two halves,
+already in the layout the setup script expects:
 
 ```
-Leximine-0.1.0\
+Leximine-0.1.1\
+  Setup.cmd       double-click this
   INSTALL.md      this file
   LICENSE         the mod half's licence
-  backend\        the speech server -- setup.cmd lives here
+  backend\        the speech server
   mod\            the built jar
 ```
 
@@ -97,7 +97,8 @@ checksum.
 
 ### 2. Run setup
 
-In the backend folder, double-click **`setup.cmd`**.
+Double-click **`Setup.cmd`**, at the top of the folder you just unzipped.
+(`backend\setup.cmd` is the same script, if you would rather run it there.)
 
 It builds the Python environment, fetches Fabric API, puts a **Leximine
 Backend** shortcut on your desktop, and adds a **Leximine** profile to your
@@ -117,7 +118,7 @@ A healthy machine looks like this:
   Minecraft
     [ok]   Fabric loader for 1.20.4 (fabric-loader-0.18.6-1.20.4)
     [ok]   'Leximine' launcher profile present
-    [ok]   leximine-0.1.0.jar installed
+    [ok]   leximine-0.1.1.jar installed
     [ok]   Fabric API present (fabric-api-0.97.3+1.20.4.jar)
 
   Speech backend (required)

@@ -1,0 +1,18 @@
+# This repository is the front door: bug.yml deliberately accepts speech
+# problems as well as game ones, because a player cannot tell which half is at
+# fault and should not have to. These two links are for the cases where they
+# can tell.
+blank_issues_enabled: true
+contact_links:
+  - name: Installing it, step by step
+    url: https://github.com/optumesto/leximine/blob/main/INSTALL.md
+    about: >
+      Requirements, the one-click setup, and check-setup.cmd, which inspects
+      every piece and names the one that is missing. Most install problems end
+      there without an issue.
+  - name: The speech server on its own — settings, the model, the GPU
+    url: https://github.com/optumesto/leximine-backend/issues
+    about: >
+      For running the backend standalone or building against its protocol. If
+      you are playing Leximine, report it here instead — bug.yml covers both
+      halves.

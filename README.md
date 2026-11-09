@@ -1,4 +1,4 @@
-# leximine-mod
+# leximine
 
 Fabric mod for Minecraft **1.20.4**. Items you pick up are held in limbo until
 you say their name in the language you are learning; a local
@@ -6,16 +6,16 @@ you say their name in the language you are learning; a local
 Recognition runs on your own machine: microphone audio is decoded in memory,
 never uploaded and never written to disk.
 
-> **Installing it to play?** → download the zip from the
-> **[latest release](https://github.com/optumesto/leximine-mod/releases/latest)**
+> **Installing it to play?** → **[download `Leximine.zip`](https://github.com/optumesto/leximine/releases/latest/download/Leximine.zip)**
 > and follow **[INSTALL.md](INSTALL.md)**. Requirements,
 > one-click setup, a `check-setup.cmd` that names whatever is missing, and an
 > exact account of the three things that do use the network. This file is the
 > design record: what each feature does and why it is built the way it is.
 >
 > **Making a release?** `scripts\make_release.ps1 -Zip` stages both halves
-> into `dist\Leximine-<version>\` (860 KB) and zips it (475 KB). It installs
-> with no JDK, no Gradle and no source.
+> into `dist\Leximine-<version>\` (864 KB) and zips that to `dist\Leximine.zip`
+> (475 KB) — the asset name is fixed, not version-stamped, so one URL stays the
+> download link. It installs with no JDK, no Gradle and no source.
 
 **It plays.** Pick an item up, it is held in limbo, the overlay shows the word
 in the language you are learning, you say it out loud, and the item is yours or
@@ -102,9 +102,9 @@ decompiles Minecraft; seconds after that). `gradlew runClient` launches 1.20.4
 and the game log shows the whole chain:
 
 ```
-    - leximine 0.1.0
-[Render thread/INFO] (leximine) Leximine 0.1.0 loaded (common)
-[Render thread/INFO] (leximine) Leximine 0.1.0 loaded (client)
+    - leximine 0.1.1
+[Render thread/INFO] (leximine) Leximine 0.1.1 loaded (common)
+[Render thread/INFO] (leximine) Leximine 0.1.1 loaded (client)
 [leximine-backend-probe/INFO] (leximine) Probing STT backend at ws://127.0.0.1:8760/ws
 [WebSocketConnectReadThread-75/INFO] (leximine) Backend connected (HTTP 101)
 [WebSocketConnectReadThread-75/INFO] (leximine) Backend ready=true model=small device=cuda language=es_es threshold=80
@@ -150,8 +150,8 @@ build — was then booted on a real Fabric 1.20.4 dedicated server with the
 installed Fabric API:
 
 ```
-    - leximine 0.1.0
-[main/INFO]: Leximine 0.1.0 loaded (common), timeout 6000 ms, per-item cooldown 300s
+    - leximine 0.1.1
+[main/INFO]: Leximine 0.1.1 loaded (common), timeout 6000 ms, per-item cooldown 300s
 [Server thread/INFO]: Done (1.518s)!
 ```
 
@@ -166,7 +166,8 @@ instead of silently doing nothing — it didn't, which means the injection into
 ## Building
 
 ```powershell
-cd Z:\leximine-mod
+git clone https://github.com/optumesto/leximine.git
+cd leximine
 .\gradlew.bat build        # jar lands in build/libs/
 .\gradlew.bat runClient    # launches 1.20.4 with the mod loaded
 ```
@@ -282,7 +283,7 @@ Point it somewhere else with `-Dleximine.backend=ws://host:port/ws`.
 Start the backend first:
 
 ```powershell
-cd Z:\leximine-backend; .\run.ps1
+cd <your leximine-backend clone>; .\run.ps1
 ```
 
 ## How the loop works
@@ -908,7 +909,7 @@ exactly how an early version of the test suite passed while proving nothing.
 
 ## Testing the loop
 
-Start the backend first (`cd Z:\leximine-backend; .\run.ps1`), then:
+Start the backend first (`.\run.ps1` in your leximine-backend clone), then:
 
 ```powershell
 powershell -File scripts\make_test_audio.ps1   # once: synthesize the fixtures

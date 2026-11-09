@@ -1,7 +1,59 @@
-# Changelog — leximine-mod
+# Changelog — leximine
 
 The record of what changed and why, in order. The READMEs carry the reasoning
 in full; this is the chronology.
+
+---
+
+## 2026-11-09 — the bare name, and one link that is the download
+
+### Changed
+
+- **`leximine-mod` is now `leximine`.** The suffix existed only to tell the two
+  halves apart, and it told players the wrong thing: this repository is the mod,
+  the release and the install docs — the one you look for when you want to
+  play. The backend keeps `leximine-backend`, which is what it is. GitHub
+  redirects the old URL, so the published 0.1.0 download link and every existing
+  clone keep working. On the backend side, `setup.ps1` and `make_icon.py` look
+  for a sibling folder named `leximine` first and still accept `leximine-mod`,
+  so a checkout from before today needs no attention.
+- **The README build block starts with `git clone`.** It opened with a `cd` into
+  an absolute path on one machine, which is not a step anyone else can follow,
+  and the clone step it implied was written down nowhere.
+- **Version 0.1.1.** Not cosmetic: the 0.1.0 zip shipped the backend half
+  under its old name, with 32 `LINGUA_*` keys in its `.env.example` and a
+  README titled `lingua-stt-backend`. Those keys still work, but a download
+  whose docs disagree with the repository it came from is its own support
+  burden. Same jar logic; the mod code did not change.
+
+### Added
+
+- **`Leximine.zip`, a name that does not move.** GitHub serves the newest
+  release's asset from `/releases/latest/download/<name>`, so a fixed filename
+  makes one URL the download link forever — no release page to navigate, no
+  version to pick. The version still shows: it is on the release, and on the
+  folder inside the zip. `make_release.ps1` names the asset, not the version.
+- **`Setup.cmd` at the top of the zip.** The first instruction after unzipping
+  used to be "go into `backend\`", which is not where anyone looks for an
+  installer. It forwards to the same script `backend\setup.cmd` runs, and
+  `setup.ps1` resolves both halves from its own location rather than the
+  working directory, so the two are interchangeable.
+- **`.github/ISSUE_TEMPLATE/config.yml`**, which this repository had none of.
+  `bug.yml` still takes speech problems as well as game ones — a player cannot
+  tell which half is at fault and should not have to — so it only routes the
+  two cases where they can: install questions to INSTALL.md, and the backend
+  standalone to the backend's issues.
+
+### Fixed
+
+- **A release could ship a `.cmd` that cmd.exe will not reliably run.**
+  `check-setup.cmd` went out in 0.1.0 with LF line endings. `.gitattributes`
+  declares `*.cmd eol=crlf`, which fixes a fresh clone and says nothing about a
+  working copy that predates the rule — and `git status` stays quiet, because
+  it compares normalised content. The release is built from the working copy,
+  so it went out wrong. `make_release.ps1` now checks the endings of every
+  `.cmd` it is about to ship and refuses the release, alongside the checks for
+  a missing jar and for Mojang's dictionaries.
 
 ---
 
