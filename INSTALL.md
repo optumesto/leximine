@@ -27,9 +27,19 @@ it is a separate program rather than something inside Minecraft.
 
 - **Minecraft: Java Edition**, version **1.20.4**. Not Bedrock, and not a
   newer version — mods are built against one version at a time.
-- **Windows 10 or 11.** The mod itself is cross-platform; the one-click setup
-  scripts are Windows-only. On Linux or macOS you can still run everything by
-  hand (see *Doing it manually* at the bottom).
+- **Windows 10 or 11.** Every launcher here is `.cmd` or `.ps1`, so the
+  one-click setup is Windows-only, and Windows is the only platform this has
+  actually been played on.
+
+  The parts underneath are not Windows-specific: the mod is an ordinary
+  Fabric jar, and CI builds the mod and runs the backend's tests on Linux on
+  every push. So *Doing it manually* at the bottom should work on Linux with
+  the paths changed (`.venv/bin/pip` for `.venv\Scripts\pip`). Two things
+  are genuinely missing off Windows, both minor: speaking the word back falls
+  to the online voice only, because the offline fallback is Windows SAPI; and
+  on macOS there is no CUDA, so recognition runs on the processor — see the
+  GPU note below. Nobody has run it end to end on either, so treat it as
+  likely rather than supported.
 - **About 5 GB of free disk space**: 2.3 GB of Python libraries, 0.5 GB for
   the speech model, and room to spare.
 - **A microphone.** Any one. A headset is better than a laptop's built-in mic,
