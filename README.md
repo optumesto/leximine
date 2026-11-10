@@ -1,4 +1,4 @@
-# leximine
+# Leximine — a Minecraft mod that makes you speak the language you are learning
 
 Fabric mod for Minecraft **1.20.4**. Items you pick up are held in limbo until
 you say their name in the language you are learning; a local
