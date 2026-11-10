@@ -5,6 +5,40 @@ in full; this is the chronology.
 
 ---
 
+## 2026-11-10 — only claims that were measured, and an in-progress notice
+
+### Changed
+
+- **German moved to `full` in the language table.** The backend grew a German
+  phrase pack, and the picker tag derives from `supports_sentences()`, so
+  this is a documentation change rather than a mod change. Tiers 3 and 4 now
+  produce sentences for Spanish, Japanese, Russian, French and German.
+- **An In progress block at the top of the README.** The mod is still being
+  changed regularly and the README now says so, naming the two things a
+  reader should know are unfinished rather than leaving them to be
+  discovered: which languages reach tier 3, and that French and German fall
+  back silently on items whose gender is not in the table.
+- **Coverage claims replaced with numbers a script prints.** French
+  **89.7%** and German **83.3%** of 2,116 reachable items, from
+  `scripts/coverage_report.py` in the backend repo, which measures through
+  the same call the server makes. The figures here before were measured by
+  hand against two different denominators that disagreed with each other —
+  90.4%/68.7% in the morning and 72.7%/63.6% before that. None of them were
+  reproducible, which is the actual defect; being wrong was the symptom.
+- **The denominator is described as a floor.** About a hundred of those
+  2,116 strings are UI text that shares the `block.` prefix rather than item
+  names, so the real coverage is a little better than stated. Said plainly
+  rather than tuned away.
+
+### Removed
+
+- **`docs/hud.png` from the README.** It showed an older overlay than the one
+  that ships, so it was a picture of something a downloader would not see.
+  The paragraph that pointed at "the screenshot above" was rewritten to
+  describe `--hud-shot` instead of referring to an image no longer there.
+
+---
+
 ## 2026-11-09 (later) — 0.1.2, so the download carries the installer fixes
 
 ### Changed

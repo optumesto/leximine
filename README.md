@@ -17,6 +17,31 @@ never uploaded and never written to disk.
 > (475 KB) — the asset name is fixed, not version-stamped, so one URL stays the
 > download link. It installs with no JDK, no Gradle and no source.
 
+> ### In progress
+>
+> This is an early release and it is still being changed regularly. What is
+> here works and is described honestly, but expect the following to move:
+>
+> * **Sentence tiers exist for five languages, and two of them are uneven.**
+>   Spanish, Japanese and Russian produce sentences at tiers 3 and 4 for any
+>   item. French (89.7%) and German (83.3%) only do so for items whose
+>   grammatical gender is known, and fall back silently to the bare noun
+>   otherwise. German was added on 2026-11-10 and has had the least use of any
+>   pack here.
+> * **German is nominative-only by design.** German marks case on the article
+>   and, for weak masculine nouns, on the noun itself ("ein Diamant" but "einen
+>   Diamant*en*"). That ending cannot be derived from a Minecraft item name, so
+>   frames needing the accusative were not written rather than guessed. Every
+>   German sentence you will see is therefore of the "Das ist ein X" shape.
+> * **Only Spanish was written by someone who speaks it.** The other packs were
+>   written by someone who does not, checked mechanically and by a language
+>   model. Press `N` in game to report a sentence that reads wrong.
+> * **Breaking changes are likely** while this settles. Settings names have
+>   already changed once (`LINGUA_*` → `LEXIMINE_*`, old names still honoured).
+>
+> If a claim in this file does not match what you see, that is a bug in the
+> file. Open an issue.
+
 **It plays.** Pick an item up, it is held in limbo, the overlay shows the word
 in the language you are learning, you say it out loud, and the item is yours or
 it is gone.
@@ -36,11 +61,14 @@ below:
 | [The Nether wants a reason](#the-nether-wants-a-reason) | one sentence you compose yourself before the portal lights |
 | [The End has a toll](#the-end-has-a-toll) | all twelve eyes of ender, argued into their frames at the top tier |
 
-![The challenge overlay](docs/hud.png)
+The challenge overlay shows the word, the English gloss, a live transcript of
+what the backend is hearing with its similarity score, a recording indicator
+with a level meter, and the countdown.
 
-The overlay above is a real capture mid-utterance: the word, the English gloss,
-a live transcript of what the backend is hearing with its similarity score, a
-recording indicator with a level meter, and the countdown.
+*(A screenshot used to sit here. It was removed: Minecraft's "Chat messages
+can't be verified" warning covered part of the prompt box and it captured a
+failing attempt at 60%, which together read as a broken overlay rather than a
+working one. A clean capture will replace it.)*
 
 ### Phase 4, verified end to end
 
@@ -92,8 +120,8 @@ ALL CHECKS PASSED
 
 Between them those cover both verdict paths without simulating a keypress:
 scenario 1 is the timeout, scenario 2 is the fail-open that grants the item
-when the speech backend is down. The screenshot above came from
-`--hud-shot`, which raises one long challenge and captures the window.
+when the speech backend is down. `--hud-shot` raises one long challenge and
+captures the window, which is how overlay stills are taken.
 
 ### Phase 2, verified working
 
@@ -442,8 +470,8 @@ Two limits are reported rather than faked:
 * **Tier 1 can only shorten a name built as noun + connector + material.**
   "Espada de hierro" cuts to "Espada", but German compounds
   (`Diamantschwert`) are one word and stay whole.
-* **Tier 3 only writes sentences for languages with a phrase pack** — Spanish
-  so far. The article has to be right: "un espada" is wrong and teaching it
+* **Tier 3 only writes sentences for languages with a phrase pack** — Spanish,
+  Japanese, Russian, French and German so far. The article has to be right: "un espada" is wrong and teaching it
   would be worse than not having the feature, and French gender is not
   reliably inferable from word endings. Everything else falls back to tier 2
   and says so.
@@ -710,14 +738,45 @@ whole point:
 
 | | |
 |---|---|
-| **full** | Spanish, Japanese, Russian, French. Tiers 3 and 4 ask for a sentence. |
-| **words only** | German, and every language extracted on demand. Every tier asks for the item name. |
+| **full** | Spanish, Japanese, Russian, French, German. Tiers 3 and 4 ask for a sentence. |
+| **words only** | Every language extracted on demand. Every tier asks for the item name. |
 
-French is at **90%** of items rather than all of them: its frames need the
-item's gender, Minecraft ships none, and the table of genders is written by
-hand because guessing produces "un épée". An item whose head noun is not in
-the table simply gets no sentence and falls back to tier 2 — partial is fine,
-wrong is not.
+Those are the only two tags the picker shows, and `full` is coarser than it
+sounds. **French and German both carry it without fully earning it.** Their
+frames need the item's grammatical gender, Minecraft ships none, and the
+tables are written by hand because guessing produces "un épée". An item whose
+gender is not known gets no sentence and falls back to the bare noun. The
+fallback is silent: the player meets it without being told why.
+
+Measured over the **reachable items** in each extracted dictionary — every
+`item.*` and `block.*` string it serves except the 688
+`block.minecraft.banner.*` ones, which are tooltip descriptions of banner
+patterns rather than things you can hold. `scripts/coverage_report.py` in the
+backend repo prints this table, so it can be checked rather than believed:
+
+| | gender known for | table |
+|---|---|---|
+| French | **89.7%** of 2,116 | 228 entries |
+| German | **83.3%** of 2,116 | 190 entries |
+
+That denominator is a floor: a hundred or so of those 2,116 strings are not
+item names at all, just UI text sharing the `block.` prefix, so the real
+figures are slightly better than the ones printed.
+
+Spanish, Japanese and Russian have no such gate — Japanese and Russian do not
+use articles, and Spanish derives gender from the word ending with a list of
+exceptions.
+
+Two named misses, so the shape of the gap is concrete: in French `Diamant`
+falls back while `Bloc de diamant` does not; in German `Schild` is refused on
+purpose, because *der* Schild (shield) and *das* Schild (sign) are different
+words and Minecraft uses both.
+
+French stops at 89.7% deliberately: the remaining tail is 163 head words at
+one or two items each. German's remaining gap is mostly plurals —
+"Eichenholzbretter" is planks, and a frame that says "ein" in front of it
+would be wrong — so closing it needs frames that agree with number, not more
+gender data.
 
 **Press `N` to report a sentence as wrong.** Outside Spanish the frames were
 written by someone who does not speak the language. They are checked
