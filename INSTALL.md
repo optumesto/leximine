@@ -16,6 +16,29 @@ It comes in two halves and you need both:
 | **The mod** | a Fabric mod for Minecraft 1.20.4 | in Minecraft |
 | **The speech backend** | a small local server that listens and judges | a window you leave open |
 
+### What you need, and what it costs you
+
+| | |
+|---|---|
+| **Operating system** | Windows 10 or 11. The only platform this has been played on — see the note below |
+| **Game** | Minecraft **Java Edition 1.20.4**, with Fabric Loader. Not Bedrock, not a newer version |
+| **Fabric API** | fetched for you on first install (~2 MB from Modrinth) |
+| **Java** | whatever the Minecraft launcher already uses. You do not install one |
+| **Python** | none needed. If you have no 3.11+, setup fetches the official 11 MB embeddable build |
+| **Graphics card** | an NVIDIA GPU is wanted, not required. Without one it drops to the processor by itself |
+| **Microphone** | any |
+| **Network** | needed for setup, and for speaking a word back to you. Your voice is never uploaded |
+
+| Size | |
+|---|---|
+| **The download** | `Leximine.zip`, **483 KB** (the mod jar is 310 KB of it) |
+| **After first-run setup** | about **2.8 GB** — 2.3 GB of Python libraries and a 461 MB speech model, both fetched once |
+| **Free disk space to have** | **5 GB**, which leaves room to spare |
+| **VRAM** | the model's weights are 461 MB; any modern card has room |
+
+Setup is one click but it is not quick: it downloads 2.8 GB the first time.
+Everything after that is local and instant.
+
 The backend does the hard part — speech recognition on your GPU — which is why
 it is a separate program rather than something inside Minecraft.
 

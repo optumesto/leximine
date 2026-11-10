@@ -13,8 +13,8 @@ never uploaded and never written to disk.
 > design record: what each feature does and why it is built the way it is.
 >
 > **Making a release?** `scripts\make_release.ps1 -Zip` stages both halves
-> into `dist\Leximine-<version>\` (864 KB) and zips that to `dist\Leximine.zip`
-> (475 KB) — the asset name is fixed, not version-stamped, so one URL stays the
+> into `dist\Leximine-<version>\` (760 KB) and zips that to `dist\Leximine.zip`
+> (483 KB) — the asset name is fixed, not version-stamped, so one URL stays the
 > download link. It installs with no JDK, no Gradle and no source.
 
 > ### In progress
