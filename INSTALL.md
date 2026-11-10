@@ -31,7 +31,7 @@ It comes in two halves and you need both:
 
 | Size | |
 |---|---|
-| **The download** | `Leximine.zip`, **483 KB** (the mod jar is 310 KB of it) |
+| **The download** | `Leximine.zip`, **491 KB** (the mod jar is 310 KB of it) |
 | **After first-run setup** | about **2.8 GB** — 2.3 GB of Python libraries and a 461 MB speech model, both fetched once |
 | **Free disk space to have** | **5 GB**, which leaves room to spare |
 | **VRAM** | the model's weights are 461 MB; any modern card has room |
