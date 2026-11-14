@@ -93,8 +93,9 @@ public final class LexCommand {
 								.then(CommandManager.literal("language")
 										.then(CommandManager.argument("code", StringArgumentType.word())
 												.suggests((context, builder) -> CommandSource.suggestMatching(
-														List.of("es_es", "fr_fr", "de_de", "it_it", "pt_br",
-																"ja_jp", "ko_kr", "ru_ru", "zh_cn", "nl_nl"),
+														List.of("es_es", "fr_fr", "de_de", "pl_pl", "it_it",
+																"pt_br", "ja_jp", "ko_kr", "ru_ru", "zh_cn",
+																"nl_nl"),
 														builder))
 												.executes(LexCommand::setLanguage)))
 								.then(CommandManager.literal("difficulty")

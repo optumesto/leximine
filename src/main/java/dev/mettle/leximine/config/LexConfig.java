@@ -43,7 +43,7 @@ public final class LexConfig {
 			"/leximine set <option> <value> -- the in-game name is in [brackets]",
 			"below where it is shorter than the key. Tab completes all of them.",
 			"",
-			"language   - a Minecraft language code, e.g. es_es, fr_fr, de_de, ja_jp, ru_ru.",
+			"language   - a Minecraft language code, e.g. es_es, fr_fr, de_de, pl_pl, ja_jp, ru_ru.",
 			"             The backend pulls it from your own Minecraft files the first time.",
 			"frequency  - how long a word stays known after you say it RIGHT:",
 			"             always, 5m, 10m, 30m, 1h, 6h, 1d, once",
