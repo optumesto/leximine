@@ -116,7 +116,7 @@ newest release — and unzip it anywhere you like. Inside are the two halves,
 already in the layout the setup script expects:
 
 ```
-Leximine-0.1.2\
+Leximine-0.1.4\
   Setup.cmd       double-click this
   INSTALL.md      this file
   LICENSE         the mod half's licence

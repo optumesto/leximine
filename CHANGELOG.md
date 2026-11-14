@@ -5,6 +5,36 @@ in full; this is the chronology.
 
 ---
 
+## 2026-11-14 — 0.1.4, Polish
+
+### Added
+
+- **Polish (`pl_pl`).** The backend that ships in this zip gains a full
+  Polish sentence pack, so Polish now reaches tiers 3 and 4 rather than
+  stopping at the item name. 2,120 reachable items, all covered.
+- `pl_pl` is suggested by `/leximine set language` and named in the config
+  help text. `LanguageCatalog` already carried the display name, and the
+  command's validation is a regex that already accepted the code, so this
+  only changes what gets offered.
+
+### Why the Polish pack looks different from the others
+
+Polish has no equivalent of the Russian construction that keeps a noun in
+the nominative. "I have X" is "mam X" and governs the accusative, and item
+names are adjective-first, so a feminine item inflects twice: "Akacjowa
+furtka" becomes "Akacjową furtkę". Number cannot be read off the
+adjective either ("akacjowe drewno" is neuter singular, "akacjowe liście"
+is plural), and Polish marks the SPEAKER's gender in the past tense, which
+the mod does not know.
+
+So every Polish frame is invariant — presentatives, appositions and the
+"to" copula — with the item name inserted exactly as Minecraft spells it.
+The cost is that "I have X" and "I am crafting X" are absent. The gain is
+that Polish needs no gender table, so coverage is total rather than
+partial as it is for French and German.
+
+---
+
 ## 2026-11-10 (later) — 0.1.3, so the download carries the German pack
 
 ### Changed
